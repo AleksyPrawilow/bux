@@ -1,1 +1,1 @@
-# BUX - Better University Experience
+# mUniversity - Better University Experience
