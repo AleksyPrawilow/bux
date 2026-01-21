@@ -16,4 +16,4 @@ Głównym założeniem rozwijanego projektu jest poprawa doświadczeń związany
 - System oceniania zajęć - w skali od 1 do 5 oceniane są podstawowe informacje takie jak: jasność tłumaczenia materiałów, jakość organizacji zajęć, zaangażowanie, sposób komunikacji ze studentami, sprawiedliwość i obiektywność oceniania. Oceny są prezentowane w formie zagregowanej przy każdym prowadzącym zajęcia.
 
 ## Polityka prywatności
-Polityka prywatności została opisana na [stronie internetowej](http://www.cdkentertainment.pl/muniversity/privacy).
+Polityka prywatności została opisana na [stronie internetowej(na razie musi być http, nie https)](http://www.cdkentertainment.pl/muniversity/privacy).
