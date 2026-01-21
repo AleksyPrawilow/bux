@@ -197,7 +197,7 @@ fun SettingsPageView() {
                     textStyle = textStyle
                 ) {
                     val subject = Uri.encode("Bug report")
-                    val uri = "mailto:mobile.usos.enhanced.app@gmail.com?subject=$subject".toUri()
+                    val uri = "mailto:entertainmentcdk@gmail.com?subject=$subject".toUri()
                     val intent = Intent(Intent.ACTION_SENDTO, uri)
                     try {
                         context.startActivity(Intent.createChooser(intent, "Choose an email client"))
@@ -221,7 +221,7 @@ fun SettingsPageView() {
                     fontWeight = fontWeight,
                     textStyle = textStyle
                 ) {
-                    val packageName = "com.cdkentertainment.mobilny_usos_enhanced"
+                    val packageName = "com.cdkentertainment.muniversity"
                     try {
                         context.startActivity(
                             Intent(
@@ -285,7 +285,12 @@ fun SettingsPageView() {
                     fontWeight = fontWeight,
                     textStyle = textStyle
                 ) {
-                    showPrivacyPolicy = true
+                    context.startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            "http://www.cdkentertainment.pl/muniversity/privacy".toUri()
+                        )
+                    )
                 }
             }
         }

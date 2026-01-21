@@ -223,39 +223,45 @@ private fun SelectUniversityView() {
         showContent = true
     }
 
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth(0.85f)
-                .background(UISingleton.color2.copy(alpha = 0.85f), RoundedCornerShape(UISingleton.uiElementsCornerRadius.dp))
-                .padding(12.dp)
+    if (!UserDataSingleton.acceptedPrivacyPolicy) {
+        PrivacyPolicyPopupView()
+    }
+
+    if (UserDataSingleton.acceptedPrivacyPolicy) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
         ) {
-            Text(
-                text = stringResource(R.string.choose_your_university),
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.ExtraBold,
-                color = UISingleton.textColor1
-            )
-            for (university in universities) {
-                AnimatedVisibility(
-                    visible = showContent,
-                    enter = enterTransition(university.id)
-                ) {
-                    GradeCardView(
-                        modifier = Modifier.fillMaxWidth(),
-                        courseName = university.name.getLocalized(context),
-                        showGrade = false,
-                        showArrow = true,
-                        sideIcon = ImageVector.vectorResource(R.drawable.rounded_school_24),
-                        onClick = {
-                            onUniversitySelect(university.id)
-                        }
-                    )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth(0.85f)
+                    .background(UISingleton.color2.copy(alpha = 0.85f), RoundedCornerShape(UISingleton.uiElementsCornerRadius.dp))
+                    .padding(12.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.choose_your_university),
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = UISingleton.textColor1
+                )
+                for (university in universities) {
+                    AnimatedVisibility(
+                        visible = showContent && UserDataSingleton.acceptedPrivacyPolicy,
+                        enter = enterTransition(university.id)
+                    ) {
+                        GradeCardView(
+                            modifier = Modifier.fillMaxWidth(),
+                            courseName = university.name.getLocalized(context),
+                            showGrade = false,
+                            showArrow = true,
+                            sideIcon = ImageVector.vectorResource(R.drawable.rounded_school_24),
+                            onClick = {
+                                onUniversitySelect(university.id)
+                            }
+                        )
+                    }
                 }
             }
         }

@@ -48,6 +48,24 @@ class GradesPageModel {
             }
         }
     }
+    public fun checkIfSeasonHasGrades(season: Season): Boolean {
+        return true
+        // Przecież bieżący semestr też może nie mieć ocen?
+//        var foundGrade: Boolean = false
+//        // wtf is this
+//        for (course in season.courseList) {
+//            for (unit in course.courseGrades.course_units_grades) {
+//                for (unit2 in unit.value) {
+//                    for (term in unit2.values) {
+//                        if (term != null) {
+//                            foundGrade = true
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return foundGrade
+    }
 }
 @Serializable
 data class CourseGrades (

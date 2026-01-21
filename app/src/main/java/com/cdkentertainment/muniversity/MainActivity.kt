@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cdkentertainment.muniversity.UISingleton.color1
-import com.cdkentertainment.muniversity.ui.theme.BuxTheme
+import com.cdkentertainment.muniversity.ui.theme.mUniversityTheme
 import com.cdkentertainment.muniversity.view_models.FloatingButtonViewModel
 import com.cdkentertainment.muniversity.view_models.LoginPageViewModel
 import com.cdkentertainment.muniversity.view_models.ScreenManagerViewModel
@@ -47,12 +47,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         runBlocking {
             UserDataSingleton.readSettings(this@MainActivity)
+            UserDataSingleton.readPrivacyPolicyAcceptance(this@MainActivity)
+            println("Privacy Policy ${UserDataSingleton.acceptedPrivacyPolicy}")
         }
         enableEdgeToEdge(
             navigationBarStyle = SystemBarStyle.dark(Color.Transparent.toArgb())
         )
         setContent {
-            BuxTheme {
+            mUniversityTheme {
                 ContentView()
             }
         }

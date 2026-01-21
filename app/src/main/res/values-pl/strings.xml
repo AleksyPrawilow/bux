@@ -133,4 +133,7 @@
     <string name="group_singular">Grupa</string>
     <string name="groups_plural">Grupy</string>
     <string name="choose_your_university">Wybierz swoją uczelnię</string>
+    <string name="quit_confirm">Czy na pewno chcesz wyjść z aplikacji?</string>
+    <string name="privacy_policy_confirm">Korzystając z aplikacji mUniversity, potwierdzam, że zapoznałem(-am) się z treścią Polityki Prywatności oraz przyjmuję do wiadomości zasady przetwarzania danych opisane w tym dokumencie. \nPrzetwarzanie danych jest niezbędne do prawidłowego działania aplikacji i realizacji jej funkcjonalności.</string>
+    <string name="privacy_policy_confirm_2">Przechodzę do aplikacji</string>
 </resources>

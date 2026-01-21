@@ -110,7 +110,7 @@ fun FloatingButtonView(
                 .background(UISingleton.color2, CircleShape)
                 .clickable(onClick = {
                     fabViewModel.changeExpanded(false)
-                    screenManagerViewModel.changeScreen(Screens.fromOrdinal(index + 1)!!, context)
+                    screenManagerViewModel.changeScreen(Screens.fromOrdinal(index + 1)!!)
                 })
                 .border(5.dp, UISingleton.textColor1, CircleShape)
                 .then(modifier)

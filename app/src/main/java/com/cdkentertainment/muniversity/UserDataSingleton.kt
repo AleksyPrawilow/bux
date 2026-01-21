@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -26,9 +27,11 @@ object UserDataSingleton {
     private val ACCESS_TOKEN_SECRET = stringPreferencesKey("access_token_secret")
     private val SELECTED_UNIVERSITY = intPreferencesKey("SELECTED_UNIVERSITY")
     private val SELECTED_THEME = intPreferencesKey("SELECTED_THEME")
+    private val ACCEPTED_PRIVACY_POLICY = booleanPreferencesKey("ACCEPTED_PRIVACY_POLICY")
 
     var currentSettings: SettingsObject = SettingsObject()
     var selectedUniversity: Int by mutableIntStateOf(0)
+    var acceptedPrivacyPolicy: Boolean by mutableStateOf(false)
     var userData: UserInfo? by mutableStateOf(null)
     var userFaculties: MutableMap<String, SharedDataClasses.LangDict> = mutableStateMapOf()
 
@@ -38,6 +41,13 @@ object UserDataSingleton {
             settings[ACCESS_TOKEN_SECRET] = accessToken.tokenSecret
             settings[SELECTED_UNIVERSITY] = selectedUniversity
         }
+    }
+
+    suspend fun savePrivacyPolicyAcceptance(context: Context, acceptance: Boolean) {
+        context.dataStore.edit { settings ->
+            settings[ACCEPTED_PRIVACY_POLICY] = acceptance
+        }
+        acceptedPrivacyPolicy = acceptance
     }
 
     suspend fun deleteUserCredentials(context: Context) {
@@ -93,6 +103,10 @@ object UserDataSingleton {
             return OAuth1AccessToken(key, secret)
         }
         return null
+    }
+
+    suspend fun readPrivacyPolicyAcceptance(context: Context) {
+        acceptedPrivacyPolicy = context.dataStore.data.map { prefs -> prefs[ACCEPTED_PRIVACY_POLICY] ?: false }.first()
     }
 
     fun getUserFaculties(userData: UserInfo): MutableMap<String, SharedDataClasses.LangDict> {

@@ -1,5 +1,8 @@
 package com.cdkentertainment.muniversity.views
 
+import android.app.Activity
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.fadeIn
@@ -14,6 +17,17 @@ fun ScreenManager(
     currentScreen: Screens,
     screenManagerViewModel: ScreenManagerViewModel
 ) {
+    val activity: Activity? = LocalActivity.current
+
+    BackHandler(
+        enabled = screenManagerViewModel.selectedScreen != Screens.LOGIN
+    ) {
+        if (screenManagerViewModel.screensStack.count() < 2) {
+            activity?.moveTaskToBack(true)
+            return@BackHandler
+        }
+        screenManagerViewModel.retractScreen()
+    }
     AnimatedContent(
         transitionSpec = { fadeIn() + slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.End) togetherWith fadeOut() + slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.End) },
         targetState = currentScreen

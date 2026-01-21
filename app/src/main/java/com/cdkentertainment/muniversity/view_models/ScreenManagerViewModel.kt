@@ -1,6 +1,5 @@
 package com.cdkentertainment.muniversity.view_models
 
-import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,19 +7,28 @@ import androidx.lifecycle.ViewModel
 import com.cdkentertainment.muniversity.R
 
 class ScreenManagerViewModel: ViewModel() {
+    var screensStack: ArrayDeque<Screens> = ArrayDeque(listOf())
     var selectedScreen: Screens by mutableStateOf(Screens.LOGIN)
         private set
     var showFab: Boolean by mutableStateOf(false)
 
-    fun changeScreen(newScreen: Screens, context: Context?) {
+    fun changeScreen(newScreen: Screens) {
         if (selectedScreen == newScreen) {
             return
         }
+        screensStack.addLast(selectedScreen)
         selectedScreen = newScreen
     }
 
+    fun retractScreen() {
+        if (screensStack.count() < 2) {
+            return
+        }
+        selectedScreen = screensStack.removeLast()
+    }
+
     fun authorize() {
-        changeScreen(Screens.HOME, null)
+        changeScreen(Screens.HOME)
     }
 }
 

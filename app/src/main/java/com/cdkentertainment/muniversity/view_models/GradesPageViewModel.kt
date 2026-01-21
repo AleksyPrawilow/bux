@@ -29,14 +29,16 @@ class GradesPageViewModel: ViewModel() {
     val gradesPageModel: GradesPageModel = GradesPageModel()
 
     suspend fun suspendFetchSemesterGrades(semester: String) {
-        if (userSubjects.containsKey(semester) || loadingMap[semester] == true) return
+        if (userSubjects.containsKey(semester) || loadingMap[semester] == true || loadedMap[semester] == true) return
         loadingMap[semester] = true
         errorMap[semester] = false
         loadedMap[semester] = false
         withContext(Dispatchers.IO) {
             try {
                 val semesterCourses: Season = gradesPageModel.fetchUserGrades(semester)
-                userSubjects[semester] = semesterCourses
+                if (gradesPageModel.checkIfSeasonHasGrades(semesterCourses)) {
+                    userSubjects[semester] = semesterCourses
+                }
                 errorMap[semester] = false
                 loadedMap[semester] = true
             } catch (e: Exception) {
@@ -67,7 +69,7 @@ class GradesPageViewModel: ViewModel() {
         }
     }
     fun fetchSemesterGrades(semester: String) {
-        if (userSubjects.containsKey(semester) || loadingMap[semester] == true) return
+        if (userSubjects.containsKey(semester) || loadingMap[semester] == true || loadedMap[semester] == true) return
         loadingMap[semester] = true
         errorMap[semester] = false
         loadedMap[semester] = false
@@ -75,7 +77,9 @@ class GradesPageViewModel: ViewModel() {
             withContext(Dispatchers.IO) {
                 try {
                     val semesterCourses: Season = gradesPageModel.fetchUserGrades(semester)
-                    userSubjects[semester] = semesterCourses
+                    if (gradesPageModel.checkIfSeasonHasGrades(semesterCourses)) {
+                        userSubjects[semester] = semesterCourses
+                    }
                     errorMap[semester] = false
                     loadedMap[semester] = true
                 } catch (e: Exception) {

@@ -200,7 +200,7 @@ fun HomePageView() {
                         maxWidth = maxCardWidth,
                         badge = if (gradesViewModel.latestGrades.isNullOrEmpty()) null else gradesViewModel.latestGrades?.size.toString() + "!"
                     ) {
-                        screenManagerViewModel.changeScreen(Screens.GRADES, context)
+                        screenManagerViewModel.changeScreen(Screens.GRADES)
                     }
                 }
 
@@ -210,7 +210,7 @@ fun HomePageView() {
                         title = cardLabels[1].first,
                         maxWidth = maxCardWidth
                     ) {
-                        screenManagerViewModel.changeScreen(Screens.TESTS, context)
+                        screenManagerViewModel.changeScreen(Screens.TESTS)
                     }
                 }
 
@@ -223,7 +223,7 @@ fun HomePageView() {
                         loading = paymentsPageViewModel.loading,
                         loadingError = paymentsPageViewModel.error
                     ) {
-                        screenManagerViewModel.changeScreen(Screens.PAYMENTS, context)
+                        screenManagerViewModel.changeScreen(Screens.PAYMENTS)
                     }
                 }
 
@@ -233,7 +233,7 @@ fun HomePageView() {
                         title = cardLabels[3].first,
                         maxWidth = maxCardWidth,
                     ) {
-                        screenManagerViewModel.changeScreen(Screens.LECTURERS, context)
+                        screenManagerViewModel.changeScreen(Screens.LECTURERS)
                     }
                 }
             }
