@@ -76,7 +76,7 @@ object UISingleton {
     )
 
     private val oledTheme: Theme = Theme(
-        id = 3,
+        id = 2,
         color1 = Color(0xFF000000),
         color2 = Color(0xFF2A2A2A),
         color3 = Color(0xFFFFEB3B),
