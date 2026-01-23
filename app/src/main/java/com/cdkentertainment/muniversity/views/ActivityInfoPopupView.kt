@@ -200,9 +200,9 @@ fun ActivityInfoPopupView(
                         }
                     }
                 }
-                Spacer(modifier = Modifier.height((12 + 48).dp))
+                Spacer(modifier = Modifier.height((12).dp))
             }
-            DismissPopupButtonView(onDismissRequest = onDismissRequest, modifier = Modifier.align(Alignment.BottomEnd))
+            DismissPopupButtonView(onDismissRequest = onDismissRequest, modifier = Modifier.align(Alignment.TopEnd))
         }
     }
 }

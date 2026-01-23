@@ -43,6 +43,7 @@ fun GradeCardView(
     showGrade: Boolean = true,
     showArrow: Boolean = false,
     backgroundColor: Color = UISingleton.color1,
+    gradeIconIsActive: Boolean = true,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     fontWeight: FontWeight = FontWeight.Medium,
     sideIcon: ImageVector? = null,
@@ -114,12 +115,12 @@ fun GradeCardView(
                         .padding(top = 12.dp, bottom = 12.dp, end = 12.dp)
                         .defaultMinSize(minWidth = 40.dp)
                         .height(40.dp)
-                        .background(UISingleton.color3, RoundedCornerShape(50.dp))
+                        .background(if (gradeIconIsActive) UISingleton.color3 else UISingleton.color2, RoundedCornerShape(50.dp))
                         .padding(horizontal = 6.dp)
                 ) {
                     Text(
                         text = grade,
-                        color = UISingleton.textColor4,
+                        color = if (gradeIconIsActive) UISingleton.textColor4 else UISingleton.textColor1,
                         fontSize = 17.sp.scaleIndependent,
                         fontWeight = FontWeight.ExtraBold,
                         maxLines = 1,

@@ -51,7 +51,8 @@ fun CourseGradesView(
                 grade = if (condition) data.courseGrades.course_units_grades[courseUnit]?.first()["1"]?.value_symbol ?: "—" else "—",
                 showArrow = condition,
                 backgroundColor = UISingleton.color1,
-                sideIcon = ImageVector.vectorResource(UIHelper.activityTypeIconMapping[nameMap[courseUnit]?.classtype_id] ?: UIHelper.otherIcon)
+                gradeIconIsActive = condition,
+                sideIcon = ImageVector.vectorResource(UIHelper.activityTypeIconMapping[nameMap[courseUnit]?.classtype_id] ?: UIHelper.otherIcon),
             ) {
                 UISingleton.blurContent()
                 popupGrade = data.courseGrades.course_units_grades[courseUnit]?.first()["1"]

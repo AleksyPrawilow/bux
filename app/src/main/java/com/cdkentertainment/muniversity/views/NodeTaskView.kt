@@ -37,6 +37,7 @@ fun NodeTaskView(
         courseName = nodeName,
         grade = studentsPoints?.points?.toString() ?: "—",
         showGrade = (studentsPoints != null && studentsPoints.points != null) || (subnodes.isNullOrEmpty()),
+        gradeIconIsActive = studentsPoints?.points != null,
         showArrow = !subnodes.isNullOrEmpty(),
         onClick = clicked
     )
