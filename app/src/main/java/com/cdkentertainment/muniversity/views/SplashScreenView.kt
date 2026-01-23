@@ -129,7 +129,7 @@ fun SplashScreenView(modifier: Modifier) {
                         .background(UISingleton.color4, CircleShape)
                 ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.rounded_school_24),
+                        imageVector = ImageVector.vectorResource(R.drawable.muniversitylogo),
                         contentDescription = null,
                         tint = UISingleton.textColor4,
                         modifier = Modifier
