@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
@@ -49,6 +50,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
@@ -343,7 +345,14 @@ fun LecturerRatesPageView() {
                             }
                         },
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Search
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onSearch = {
+                                onQuerySearch(searchValue, false)
+                                searchValue = ""
+                            }
                         ),
                         value = searchValue,
                         singleLine = true,
