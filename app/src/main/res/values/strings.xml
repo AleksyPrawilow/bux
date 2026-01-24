@@ -145,4 +145,5 @@
     <string name="friday_short">fr</string>
     <string name="saturday_short">sa</string>
     <string name="sunday_short">su</string>
+    <string name="cant_review">Can\'t review this lecturer\'s classes</string>
 </resources>

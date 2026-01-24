@@ -32,6 +32,7 @@ class LecturerRatesPageViewModel: ViewModel() {
     var lecturersIndexError: MutableMap<String, Boolean> = mutableStateMapOf()
     var lecturersIndex: MutableMap<String, List<SharedDataClasses.Human>> = mutableStateMapOf()
     var lecturersIndexTotal: MutableMap<String, Int> = mutableStateMapOf()
+    var canAddRatesLecturers: MutableMap<String, Boolean> = mutableStateMapOf()
     var lecturersIndexNextPage: Boolean = true
     // *****End lecturers Index block*****
 
@@ -296,6 +297,22 @@ class LecturerRatesPageViewModel: ViewModel() {
                 lastQueryResults = null
                 lecturersSearchError = true
                 lecturersSearchLoading = false
+            }
+        }
+    }
+
+    suspend fun checkIfCanAddRate(lecturerId: String): Boolean {
+        if (canAddRatesLecturers[lecturerId] != null) {
+            return canAddRatesLecturers[lecturerId] == true
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                val canAdd: Boolean = model.checkIfCanAddRate(lecturerId)
+                canAddRatesLecturers[lecturerId] = canAdd
+                return@withContext canAdd
+            } catch (e: Exception) {
+                e.printStackTrace()
+                throw(Exception("API Error"))
             }
         }
     }

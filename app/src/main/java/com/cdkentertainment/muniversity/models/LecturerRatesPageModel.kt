@@ -19,6 +19,7 @@ class LecturerRatesPageModel {
     private val addUserRateUrl: String = "LecturerRates/AddRate"
     private val deleteUserRateUrl: String = "LecturerRates/DeleteRate"
     private val patchUserRateUrl: String = "LecturerRates/UpdateRate"
+    private val checkIfCanAddRateUrl: String = "LecturerRates/CheckIfCanAddRate"
     private val parser: Json = Json {ignoreUnknownKeys = true}
 
     public suspend fun getUserRates(userId: Int): List<UserRate> {
@@ -204,6 +205,18 @@ class LecturerRatesPageModel {
             val response: BackendDataSender.BackendResponse = BackendDataSender.get("$searchUserUrl?query=$query&start=$start")
             if (response.statusCode == 200 && response.body != null) {
                 val parsedResponse: SearchedLecturers = parser.decodeFromString<SearchedLecturers>(response.body!!)
+                return@withContext parsedResponse
+            } else {
+                throw(Exception("API Error"))
+            }
+        }
+    }
+    public suspend fun checkIfCanAddRate(lecturerId: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            val response: BackendDataSender.BackendResponse = BackendDataSender.get("$checkIfCanAddRateUrl?lecturerId=$lecturerId")
+            println(response)
+            if (response.statusCode == 200 && response.body != null) {
+                val parsedResponse: Boolean = parser.decodeFromString<Boolean>(response.body!!)
                 return@withContext parsedResponse
             } else {
                 throw(Exception("API Error"))

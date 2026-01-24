@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.CircularProgressIndicator
@@ -81,19 +82,31 @@ fun LecturerInfoPopupView(
     var lecturerDataFetchError: Boolean by rememberSaveable { mutableStateOf(false) }
 
     val loadLecturersInfo: () -> Unit = {
-        lecturerDataFetched = false
-        lecturerDataFetchError = false
-        viewModel.getLecturersExtendedData(
-            lecturerIds = listOf(data.human.id),
-            onSuccess = {
-                lecturerDataFetched = true
-                lecturerDataFetchError = false
-            },
-            onError = {
-                lecturerDataFetchError = true
+        coroutineScope.launch {
+            lecturerDataFetched = false
+            lecturerDataFetchError = false
+            try {
+                if (viewModel.canAddRatesLecturers[data.human.id] == null) {
+                    viewModel.checkIfCanAddRate(data.human.id)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
                 lecturerDataFetched = false
+                lecturerDataFetchError = true
+                return@launch
             }
-        )
+            viewModel.getLecturersExtendedData(
+                lecturerIds = listOf(data.human.id),
+                onSuccess = {
+                    lecturerDataFetched = true
+                    lecturerDataFetchError = false
+                },
+                onError = {
+                    lecturerDataFetchError = true
+                    lecturerDataFetched = false
+                }
+            )
+        }
     }
 
     LaunchedEffect(Unit) {
@@ -294,51 +307,67 @@ fun LecturerInfoPopupView(
                         )
                     }
                 }
-
                 item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
-                            .shadow(3.dp, shape = RoundedCornerShape(UISingleton.uiElementsCornerRadius.dp))
-                            .background(UISingleton.color1, RoundedCornerShape(UISingleton.uiElementsCornerRadius.dp))
-                            .padding(12.dp)
+                    AnimatedVisibility(
+                        visible = viewModel.canAddRatesLecturers[data.human.id] == false,
+                        enter = UIHelper.slideEnterTransition(4)
                     ) {
-                        AnimatedVisibility(
-                            visible = userRating == null || editingRate
+                        TextAndIconCardView(
+                            title = stringResource(R.string.cant_review),
+                            icon = Icons.Rounded.Close,
+                            iconSize = 40.dp,
+                            iconPadding = 6.dp,
+                            backgroundColor = UISingleton.color1,
+                            modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 12.dp)
+                        )
+                    }
+                }
+                item {
+                    if (viewModel.canAddRatesLecturers[data.human.id] != null && viewModel.canAddRatesLecturers[data.human.id] != false)  {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
+                                .shadow(3.dp, shape = RoundedCornerShape(UISingleton.uiElementsCornerRadius.dp))
+                                .background(UISingleton.color1, RoundedCornerShape(UISingleton.uiElementsCornerRadius.dp))
+                                .padding(12.dp)
                         ) {
-                            LecturerRateView(
-                                lecturerId = data.human.id,
-                                title = stringResource(R.string.your_rating),
-                                numberOfReviews = 0,
-                                showNumberOfReviews = false,
-                                rate = if (userRating != null) LecturerRate(userRating.rate1.toFloat(), userRating.rate2.toFloat(), userRating.rate3.toFloat(), userRating.rate4.toFloat(), userRating.rate5.toFloat()) else LecturerRate(),
-                                onAddRate = { rate ->
-                                    coroutineScope.launch {
-                                        if (userRating != null) {
-                                            viewModel.updateUserRate(data.human.id, rate)
-                                            editingRate = false
-                                        } else {
-                                            viewModel.addUserRate(lecturerId = data.human.id, rate)
-                                            editingRate = false
+                            AnimatedVisibility(
+                                visible = (userRating == null || editingRate) && viewModel.canAddRatesLecturers[data.human.id] != false && viewModel.canAddRatesLecturers[data.human.id] != null
+                            ) {
+                                LecturerRateView(
+                                    lecturerId = data.human.id,
+                                    title = stringResource(R.string.your_rating),
+                                    numberOfReviews = 0,
+                                    showNumberOfReviews = false,
+                                    rate = if (userRating != null) LecturerRate(userRating.rate1.toFloat(), userRating.rate2.toFloat(), userRating.rate3.toFloat(), userRating.rate4.toFloat(), userRating.rate5.toFloat()) else LecturerRate(),
+                                    onAddRate = { rate ->
+                                        coroutineScope.launch {
+                                            if (userRating != null) {
+                                                viewModel.updateUserRate(data.human.id, rate)
+                                                editingRate = false
+                                            } else {
+                                                viewModel.addUserRate(lecturerId = data.human.id, rate)
+                                                editingRate = false
+                                            }
                                         }
                                     }
-                                }
-                            )
-                        }
-                        AnimatedVisibility(
-                            visible = userRating != null && !editingRate,
-                        ) {
-                            LecturerRateView(
-                                lecturerId = data.human.id,
-                                title = stringResource(R.string.your_rating),
-                                numberOfReviews = 1,
-                                showNumberOfReviews = false,
-                                rate = if (userRating != null) LecturerRate(userRating.rate1.toFloat(), userRating.rate2.toFloat(), userRating.rate3.toFloat(), userRating.rate4.toFloat(), userRating.rate5.toFloat()) else LecturerRate(),
-                                onEditRate = {
-                                    editingRate = true
-                                }
-                            )
+                                )
+                            }
+                            AnimatedVisibility(
+                                visible = viewModel.canAddRatesLecturers[data.human.id] == true && userRating != null && !editingRate,
+                            ) {
+                                LecturerRateView(
+                                    lecturerId = data.human.id,
+                                    title = stringResource(R.string.your_rating),
+                                    numberOfReviews = 1,
+                                    showNumberOfReviews = false,
+                                    rate = if (userRating != null) LecturerRate(userRating.rate1.toFloat(), userRating.rate2.toFloat(), userRating.rate3.toFloat(), userRating.rate4.toFloat(), userRating.rate5.toFloat()) else LecturerRate(),
+                                    onEditRate = {
+                                        editingRate = true
+                                    }
+                                )
+                            }
                         }
                     }
                 }
