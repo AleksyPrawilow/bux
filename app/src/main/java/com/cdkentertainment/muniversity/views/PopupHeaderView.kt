@@ -20,6 +20,7 @@ import com.cdkentertainment.muniversity.UISingleton
 @Composable
 fun PopupHeaderView(
     title: String,
+    topOffset: Int = 48,
     content: @Composable () -> Unit = {}
 ) {
     Box(
@@ -28,7 +29,7 @@ fun PopupHeaderView(
             .fillMaxWidth()
             .shadow(4.dp)
             .background(UISingleton.color2)
-            .padding(start = 12.dp, end = 12.dp, bottom = 12.dp, top = (12 + 48).dp)
+            .padding(start = 12.dp, end = 12.dp, bottom = 12.dp, top = (12 + topOffset).dp)
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),

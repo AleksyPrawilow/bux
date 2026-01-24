@@ -65,7 +65,7 @@ fun PrivacyPolicyPopupView(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                PopupHeaderView(stringResource(R.string.privacy_policy))
+                PopupHeaderView(stringResource(R.string.privacy_policy), 5)
                 Text(
                     text = stringResource(R.string.privacy_policy_confirm),
                     style = MaterialTheme.typography.titleMedium,

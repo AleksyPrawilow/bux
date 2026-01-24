@@ -26,11 +26,13 @@ object UserDataSingleton {
     private val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token_key")
     private val ACCESS_TOKEN_SECRET = stringPreferencesKey("access_token_secret")
     private val SELECTED_UNIVERSITY = intPreferencesKey("SELECTED_UNIVERSITY")
+    private val SHOW_PAGE_LABELS = booleanPreferencesKey("SHOW_PAGE_LABELS")
     private val SELECTED_THEME = intPreferencesKey("SELECTED_THEME")
     private val ACCEPTED_PRIVACY_POLICY = booleanPreferencesKey("ACCEPTED_PRIVACY_POLICY")
 
     var currentSettings: SettingsObject = SettingsObject()
     var selectedUniversity: Int by mutableIntStateOf(0)
+    var showPageLabels: Boolean by mutableStateOf(true)
     var acceptedPrivacyPolicy: Boolean by mutableStateOf(false)
     var userData: UserInfo? by mutableStateOf(null)
     var userFaculties: MutableMap<String, SharedDataClasses.LangDict> = mutableStateMapOf()
@@ -62,12 +64,16 @@ object UserDataSingleton {
     suspend fun saveUserSettings(context: Context) {
         context.dataStore.edit { settings ->
             settings[SELECTED_THEME] = currentSettings.selectedTheme
+            settings[SHOW_PAGE_LABELS] = showPageLabels
         }
     }
 
     suspend fun readSettings(context: Context) {
         val selectedTheme = context.dataStore.data
             .map { prefs -> prefs[SELECTED_THEME] ?: 0 }
+            .first()
+        showPageLabels = context.dataStore.data
+            .map { prefs -> prefs[SHOW_PAGE_LABELS] ?: true}
             .first()
         try {
             val theme: Theme? = UISingleton.themes[UISingleton.themes.keys.elementAt(selectedTheme)]

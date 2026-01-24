@@ -52,11 +52,11 @@ fun ScheduleDaySelectorView(
     onDaySelected: (Int) -> Unit = {}
 ) {
     val daysOfWeek: List<String> = listOf(
-        "pn",
-        "wt",
-        "śr",
-        "cz",
-        "pt"
+        stringResource(R.string.monday_short),
+        stringResource(R.string.tuesday_short),
+        stringResource(R.string.wednesday_short),
+        stringResource(R.string.thursday_short),
+        stringResource(R.string.friday_short)
     )
     val schedulePageViewModel: SchedulePageViewModel = viewModel<SchedulePageViewModel>()
     val datePickerState = rememberDatePickerState(Instant.now().toEpochMilli())
@@ -203,7 +203,7 @@ fun ScheduleDaySelectorView(
                         selected = weekOptionIndex == schedulePageViewModel.selectedWeekOption,
                     ) {
                         Text(
-                            text = if (weekOptionIndex == 0) "Ten tydzień" else "Inny tydzień",
+                            text = if (weekOptionIndex == 0) stringResource(R.string.this_week) else stringResource(R.string.other_week),
                             style = MaterialTheme.typography.titleMedium,
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.Bold

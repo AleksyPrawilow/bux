@@ -135,4 +135,14 @@
     <string name="quit_confirm">Are you sure you want to quit?</string>
     <string name="privacy_policy_confirm">By using the mUniversity application, I confirm that I have read the Privacy Policy and acknowledge the data processing principles described therein.\nData processing is necessary for the proper functioning of the application and the delivery of its features.</string>
     <string name="privacy_policy_confirm_2">Continue to the app</string>
+    <string name="show_page_labels">Show page labels</string>
+    <string name="this_week">This week</string>
+    <string name="other_week">Other week</string>
+    <string name="monday_short">mo</string>
+    <string name="tuesday_short">tu</string>
+    <string name="wednesday_short">we</string>
+    <string name="thursday_short">th</string>
+    <string name="friday_short">fr</string>
+    <string name="saturday_short">sa</string>
+    <string name="sunday_short">su</string>
 </resources>

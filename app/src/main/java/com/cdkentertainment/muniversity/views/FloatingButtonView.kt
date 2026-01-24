@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cdkentertainment.muniversity.R
 import com.cdkentertainment.muniversity.UISingleton
+import com.cdkentertainment.muniversity.UserDataSingleton
 import com.cdkentertainment.muniversity.spToDp
 import com.cdkentertainment.muniversity.view_models.FloatingButtonViewModel
 import com.cdkentertainment.muniversity.view_models.ScreenManagerViewModel
@@ -139,25 +140,27 @@ fun FloatingButtonView(
                 .width(intrinsicSize = IntrinsicSize.Min)
                 .then(modifier)
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center)
-                    .height(spToDp(10.sp) * 2)
-                    .background(
-                        color = color4,
-                        shape = RoundedCornerShape(UISingleton.uiElementsCornerRadius.dp)
-                    )
-            )
-            Text(
-                text = stringResource(Screens.fromOrdinal(index + 1)!!.pageName),
-                fontWeight = if (screenManagerViewModel.selectedScreen.ordinal == index + 1) FontWeight.ExtraBold else FontWeight.SemiBold,
-                color = if (screenManagerViewModel.selectedScreen.ordinal == index + 1) UISingleton.textColor4 else UISingleton.textColor3,
-                textAlign = TextAlign.Center,
-                fontSize = 10.sp,
-                modifier = Modifier
-                    .padding(horizontal = 4.dp)
-            )
+            if (UserDataSingleton.showPageLabels) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center)
+                        .height(spToDp(10.sp) * 2)
+                        .background(
+                            color = color4,
+                            shape = RoundedCornerShape(UISingleton.uiElementsCornerRadius.dp)
+                        )
+                )
+                Text(
+                    text = stringResource(Screens.fromOrdinal(index + 1)!!.pageName),
+                    fontWeight = if (screenManagerViewModel.selectedScreen.ordinal == index + 1) FontWeight.ExtraBold else FontWeight.SemiBold,
+                    color = if (screenManagerViewModel.selectedScreen.ordinal == index + 1) UISingleton.textColor4 else UISingleton.textColor3,
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                )
+            }
         }
     }
 

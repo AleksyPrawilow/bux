@@ -4,8 +4,8 @@
     <string name="home_page">Home</string>
     <string name="grade_page">Oceny</string>
     <string name="tests_page">Sprawdziany</string>
-    <string name="schedule_page">Rozkład</string>
-    <string name="schedule_page_header">Rozkład zajęć</string>
+    <string name="schedule_page">Plan</string>
+    <string name="schedule_page_header">Plan zajęć</string>
     <string name="class_groups_page">Grupy</string>
     <string name="class_groups_page_header">Grupy zajęciowe</string>
     <string name="payments_page">Płatności</string>
@@ -136,4 +136,14 @@
     <string name="quit_confirm">Czy na pewno chcesz wyjść z aplikacji?</string>
     <string name="privacy_policy_confirm">Korzystając z aplikacji mUniversity, potwierdzam, że zapoznałem(-am) się z treścią Polityki Prywatności oraz przyjmuję do wiadomości zasady przetwarzania danych opisane w tym dokumencie. \nPrzetwarzanie danych jest niezbędne do prawidłowego działania aplikacji i realizacji jej funkcjonalności.</string>
     <string name="privacy_policy_confirm_2">Przechodzę do aplikacji</string>
+    <string name="show_page_labels">Pokazuj etykiety stron</string>
+    <string name="this_week">Ten tydzień</string>
+    <string name="other_week">Inny tydzień</string>
+    <string name="monday_short">pn</string>
+    <string name="tuesday_short">wt</string>
+    <string name="wednesday_short">śr</string>
+    <string name="thursday_short">cz</string>
+    <string name="friday_short">pt</string>
+    <string name="saturday_short">sb</string>
+    <string name="sunday_short">nd</string>
 </resources>

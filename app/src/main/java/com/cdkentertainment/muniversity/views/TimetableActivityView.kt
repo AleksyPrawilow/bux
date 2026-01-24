@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -150,6 +152,14 @@ fun TimetableActivityView(
                     contentDescription = null,
                     tint = UISingleton.textColor4,
                     modifier = Modifier.fillMaxSize().padding(6.dp)
+                )
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                    contentDescription = "More",
+                    tint = UISingleton.textColor1,
+                    modifier = Modifier
+                        .offset(x = -36.dp)
+                        .padding(horizontal = 12.dp)
                 )
             }
             Box(

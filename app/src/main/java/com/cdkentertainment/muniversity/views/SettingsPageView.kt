@@ -135,6 +135,11 @@ fun SettingsPageView() {
         }
         item {
             AnimatedVisibility(showElements, enter = enterTransition(3)) {
+                PageLabelSelectionButtonView(paddingModifier)
+            }
+        }
+        item {
+            AnimatedVisibility(showElements, enter = enterTransition(4)) {
                 LanguageSelectionButtonView(paddingModifier)
             }
         }
@@ -142,7 +147,7 @@ fun SettingsPageView() {
             Spacer(modifier = Modifier.height(16.dp))
         }
         item {
-            AnimatedVisibility(showElements, enter = enterTransition(4), modifier = paddingModifier) {
+            AnimatedVisibility(showElements, enter = enterTransition(5), modifier = paddingModifier) {
                 Text(
                     text = stringResource(R.string.profile),
                     color = UISingleton.textColor1,
@@ -152,7 +157,7 @@ fun SettingsPageView() {
             }
         }
         item {
-            AnimatedVisibility(showElements, enter = enterTransition(5)) {
+            AnimatedVisibility(showElements, enter = enterTransition(6)) {
                 TextAndIconCardView(
                     modifier = paddingModifier,
                     title = stringResource(R.string.log_out),
@@ -173,7 +178,7 @@ fun SettingsPageView() {
             Spacer(modifier = Modifier.height(16.dp))
         }
         item {
-            AnimatedVisibility(showElements, enter = enterTransition(6), modifier = paddingModifier) {
+            AnimatedVisibility(showElements, enter = enterTransition(7), modifier = paddingModifier) {
                 Text(
                     text = stringResource(R.string.support_n_feedback),
                     color = UISingleton.textColor1,
@@ -183,7 +188,7 @@ fun SettingsPageView() {
             }
         }
         item {
-            AnimatedVisibility(showElements, enter = enterTransition(7)) {
+            AnimatedVisibility(showElements, enter = enterTransition(8)) {
                 TextAndIconCardView(
                     modifier = paddingModifier,
                     title = stringResource(R.string.bug_report),
@@ -208,7 +213,7 @@ fun SettingsPageView() {
             }
         }
         item {
-            AnimatedVisibility(showElements, enter = enterTransition(8)) {
+            AnimatedVisibility(showElements, enter = enterTransition(9)) {
                 TextAndIconCardView(
                     modifier = paddingModifier,
                     title = stringResource(R.string.leave_a_review),
@@ -248,7 +253,7 @@ fun SettingsPageView() {
             Spacer(modifier = Modifier.height(16.dp))
         }
         item {
-            AnimatedVisibility(showElements, enter = enterTransition(9), modifier = paddingModifier) {
+            AnimatedVisibility(showElements, enter = enterTransition(10), modifier = paddingModifier) {
                 Text(
                     text = stringResource(R.string.about_app),
                     color = UISingleton.textColor1,
@@ -258,7 +263,7 @@ fun SettingsPageView() {
             }
         }
         item {
-            AnimatedVisibility(showElements, enter = enterTransition(10)) {
+            AnimatedVisibility(showElements, enter = enterTransition(11)) {
                 GradeCardView(
                     modifier = paddingModifier,
                     courseName = stringResource(R.string.app_version),
@@ -272,7 +277,7 @@ fun SettingsPageView() {
             }
         }
         item {
-            AnimatedVisibility(showElements, enter = enterTransition(11)) {
+            AnimatedVisibility(showElements, enter = enterTransition(12)) {
                 TextAndIconCardView(
                     modifier = paddingModifier,
                     title = stringResource(R.string.privacy_policy),
