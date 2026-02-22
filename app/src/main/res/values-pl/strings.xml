@@ -146,5 +146,5 @@
     <string name="friday_short">pt</string>
     <string name="saturday_short">sb</string>
     <string name="sunday_short">nd</string>
-    <string name="cant_review">Nie można wystawić ocenę zajęć dla tego prowadzącego</string>
+    <string name="cant_review">Nie możesz wystawić oceny zajęć dla tego prowadzącego</string>
 </resources>
