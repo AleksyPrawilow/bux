@@ -54,6 +54,8 @@ import com.cdkentertainment.muniversity.view_models.Screens
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun HomePageView() {
@@ -81,6 +83,7 @@ fun HomePageView() {
 
     val schedule: Schedule? = viewModel.todaySchedule
     val scheduleKeysEmpty: Boolean = schedule?.lessons?.keys?.isEmpty() ?: true
+    val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
     val textMeasurer = rememberTextMeasurer()
     val cardLabels: List<Pair<String, ImageVector>> = listOf(
@@ -275,8 +278,12 @@ fun HomePageView() {
                             if (activities == null || activities.isEmpty()) {
                                 continue
                             }
+                            val now = LocalDateTime.now()
+                            val filteredActivities: List<Lesson> = activities.filter { lesson ->
+                                 LocalDateTime.parse(lesson.end_time).isAfter(now)
+                            }
 
-                            for (activity in activities) {
+                            for (activity in filteredActivities) {
                                 val time: String = "${viewModel.getTimeFromDate(activity.start_time)}-${viewModel.getTimeFromDate(activity.end_time)}"
                                 TextAndBottomTextContainerView(
                                     title = activity.course_name.getLocalized(context),
