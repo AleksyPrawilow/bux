@@ -30,6 +30,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cdkentertainment.muniversity.R
+import com.cdkentertainment.muniversity.TermId
 import com.cdkentertainment.muniversity.UIHelper
 import com.cdkentertainment.muniversity.UISingleton
 import com.cdkentertainment.muniversity.models.LessonGroup
@@ -109,10 +110,11 @@ fun ClassGroupsPageView() {
         }
 
         if (groupsPageViewModel.lessonGroups != null) {
-            for (seasonId in groupsPageViewModel.lessonGroups!!.groups.keys.reversed()) {
+            for (seasonId in UIHelper.termIds.reversed()) {
                 val season: Map<String, List<LessonGroup>>? =
-                    groupsPageViewModel.lessonGroups!!.groups[seasonId]
-                val semesterName: SharedDataClasses.IdAndName? = UIHelper.termIds.find { it.id == seasonId }
+                    groupsPageViewModel.lessonGroups!!.groups[seasonId.id]
+                val term: TermId? = UIHelper.termIds.find { it.id == seasonId.id }
+                val semesterName: SharedDataClasses.IdAndName? = if (term != null) SharedDataClasses.IdAndName(term.id, term.name) else null
                 var groupCount: Int = 0
                 val courses: List<List<LessonGroup>> = season?.values?.toList() ?: emptyList()
                 for (course in courses) {
@@ -125,7 +127,7 @@ fun ClassGroupsPageView() {
                         enter = enterTransition(1)
                     ) {
                         SemesterCardView(
-                            semesterName ?: SharedDataClasses.IdAndName(seasonId, SharedDataClasses.LangDict(seasonId, seasonId)),
+                            semesterName ?: SharedDataClasses.IdAndName(seasonId.id, SharedDataClasses.LangDict(seasonId.id, seasonId.id)),
                             modifier = paddingModifier
                         )
                     }

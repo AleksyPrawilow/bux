@@ -32,6 +32,7 @@ import com.cdkentertainment.muniversity.UIHelper
 import com.cdkentertainment.muniversity.UISingleton
 import com.cdkentertainment.muniversity.models.CourseUnitData
 import com.cdkentertainment.muniversity.models.Season
+import com.cdkentertainment.muniversity.models.SharedDataClasses
 import com.cdkentertainment.muniversity.view_models.GradesPageViewModel
 import kotlinx.coroutines.delay
 
@@ -84,12 +85,17 @@ fun GradesPageView() {
         }
 
         for (semester in UIHelper.termIds.reversed()) {
+            if (semester.is_in_future) {
+                continue
+            }
             val season: Season? = gradesPageViewModel.userSubjects[semester.id]
-
             stickyHeader {
                 AnimatedVisibility(showElements && season != null, enter = enterTransition(1)) {
                     SemesterCardView(
-                        semester,
+                        SharedDataClasses.IdAndName(
+                            id = semester.id,
+                            name = semester.name
+                        ),
                         modifier = paddingModifier
                     )
                 }

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cdkentertainment.muniversity.R
+import com.cdkentertainment.muniversity.TermId
 import com.cdkentertainment.muniversity.UIHelper
 import com.cdkentertainment.muniversity.UISingleton
 import com.cdkentertainment.muniversity.models.SharedDataClasses
@@ -117,7 +118,8 @@ fun TestsPageView() {
             for (semester in testsPageViewModel.tests!!.tests.keys.reversed()) {
                 currentIndex++
                 val semesterTests: Map<String, Test>? = testsPageViewModel.tests?.tests[semester]
-                val semesterName: SharedDataClasses.IdAndName? = UIHelper.termIds.find { it.id == semester }
+                val term: TermId? = UIHelper.termIds.find { it.id == semester }
+                val semesterName: SharedDataClasses.IdAndName? = if (term != null) SharedDataClasses.IdAndName(term.id, term.name) else null
                 stickyHeader {
                     AnimatedVisibility(
                         visible = showElements && testsPageViewModel.loaded,

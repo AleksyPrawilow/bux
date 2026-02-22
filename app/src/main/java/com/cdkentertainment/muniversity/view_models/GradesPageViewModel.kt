@@ -14,12 +14,15 @@ import com.cdkentertainment.muniversity.models.TermGrade
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class GradesPageViewModel: ViewModel() {
     var gradesDistribution: MutableMap<Int, Map<String, Int>> = mutableStateMapOf()
     var userSubjects: MutableMap<String, Season> = mutableStateMapOf<String, Season>()
     var latestGrades: List<TermGrade>? by mutableStateOf(null)
         private set
+    var trueLatestGrades: List<Map<String, List<Map<String, TermGrade?>>>> by mutableStateOf(emptyList())
     var loadingLatestGrades: Boolean by mutableStateOf(false)
     var errorLatestGrades: Boolean by mutableStateOf(false)
     var loadingMap: MutableMap<String, Boolean> = mutableStateMapOf<String, Boolean>()
@@ -27,6 +30,33 @@ class GradesPageViewModel: ViewModel() {
     var loadedMap: MutableMap<String, Boolean> = mutableStateMapOf<String, Boolean>()
     var classtypeIdInfo: Map<String, SharedDataClasses.IdAndName>? by mutableStateOf(null)
     val gradesPageModel: GradesPageModel = GradesPageModel()
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+    fun getLatestGradesFromAll(courses: Season): List<Map<String, List<Map<String, TermGrade?>>>> {
+        val gradesToAdd: MutableList<Map<String, List<Map<String, TermGrade?>>>> = mutableListOf()
+        for (course in courses.courseList) {
+            for (unitId in course.courseGrades.course_units_grades.keys) {
+                val unit = course.courseGrades.course_units_grades[unitId]
+                val unitGradesToAdd: MutableList<Map<String, TermGrade?>> = mutableListOf()
+                if (unit != null) {
+                    for (grades in unit) {
+                        val latestGrade = grades.maxByOrNull { (_, value) ->
+                            LocalDateTime.parse(value?.date_modified, formatter)
+                        }
+                        if (latestGrade == null) {
+                            continue
+                        }
+                        if (LocalDateTime.parse(latestGrade.value?.date_modified, formatter).isAfter(
+                                LocalDateTime.now().minusDays(7))) {
+                            unitGradesToAdd.add(mapOf(latestGrade.key to latestGrade.value))
+                        }
+                    }
+                }
+                //gradesToAdd.add(unitGradesToAdd)
+            }
+        }
+        return emptyList()
+    }
 
     suspend fun suspendFetchSemesterGrades(semester: String) {
         if (userSubjects.containsKey(semester) || loadingMap[semester] == true || loadedMap[semester] == true) return
@@ -36,6 +66,7 @@ class GradesPageViewModel: ViewModel() {
         withContext(Dispatchers.IO) {
             try {
                 val semesterCourses: Season = gradesPageModel.fetchUserGrades(semester)
+                //trueLatestGrades.plus(getLatestGradesFromAll(semesterCourses))
                 if (gradesPageModel.checkIfSeasonHasGrades(semesterCourses)) {
                     userSubjects[semester] = semesterCourses
                 }

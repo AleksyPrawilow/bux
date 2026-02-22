@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.cdkentertainment.muniversity.models.SharedDataClasses
+import kotlinx.serialization.Serializable
 
 object UIHelper {
     private const val SLIDE_APPEAR_DURATION: Int = 350
@@ -30,7 +31,7 @@ object UIHelper {
     val slideEnterTransition: (Int) -> EnterTransition = { delayIndex: Int -> slideInHorizontally(tweenSlideSpec(delayIndex)) + fadeIn(tweenFadeSpec(delayIndex)) }
     val scaleEnterTransition: (Int) -> EnterTransition = { delayIndex: Int -> scaleIn(tweenFadeSpec(delayIndex)) + fadeIn(tweenFadeSpec(delayIndex)) }
     var classTypeIds: Map<String, SharedDataClasses.IdAndName> by mutableStateOf(emptyMap())
-    var termIds: List<SharedDataClasses.IdAndName> = mutableListOf()
+    var termIds: List<TermId> = mutableListOf()
 
     private val lectureIcon: Int = R.drawable.rounded_school_24
     private val labsIcon: Int = R.drawable.rounded_science_24
@@ -77,6 +78,14 @@ object UIHelper {
         "KCW" to labsIcon, // kcw
     )
 }
+
+@Serializable
+data class TermId(
+    val id: String,
+    val name: SharedDataClasses.LangDict,
+    val start_date: String,
+    val is_in_future: Boolean
+)
 
 val TextUnit.scaleIndependent @Composable get() = (this.value / LocalDensity.current.fontScale).sp
 

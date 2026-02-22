@@ -37,12 +37,14 @@ import com.cdkentertainment.muniversity.scaleIndependent
 import com.cdkentertainment.muniversity.spToDp
 import com.cdkentertainment.muniversity.view_models.SchedulePageViewModel
 import kotlinx.coroutines.delay
+import java.time.LocalTime
 
 @Composable
 fun TimetableView(
     minutesDp: Dp = spToDp(32.sp),
     startHour: Int = 7,
     endHour: Int = 23,
+    showCurrentTime: Boolean = false,
     schedule: Schedule? = null
 ) {
     val schedulePageViewModel: SchedulePageViewModel = viewModel<SchedulePageViewModel>()
@@ -51,6 +53,9 @@ fun TimetableView(
     val totalHeight: Dp = hoursDp * totalHours
     var show: Boolean by rememberSaveable { mutableStateOf(true) }
     var showDividers: Boolean by rememberSaveable { mutableStateOf(false) }
+    val localTime: LocalTime = LocalTime.now()
+    val currentHour: Int = localTime.hour
+    val currentMinute: Int = localTime.minute
     LaunchedEffect(Unit) {
         delay(150)
         show = true
@@ -62,6 +67,16 @@ fun TimetableView(
         modifier = Modifier
             .fillMaxWidth()
     ) {
+        if (showCurrentTime && currentHour < endHour && currentHour >= startHour) {
+            Box(
+                modifier = Modifier
+                    //.padding(start = 62.dp)
+                    .fillMaxWidth()
+                    .height(2.dp)
+                    .offset(y = minutesDp * (currentHour - startHour) * 4 + minutesDp / 15 * currentMinute)
+                    .background(UISingleton.color3)
+            )
+        }
         Column(
             verticalArrangement = Arrangement.spacedBy(0.dp),
             modifier = Modifier

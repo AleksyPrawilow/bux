@@ -100,18 +100,20 @@ fun GroupLecturerCardView(
                     verticalAlignment = Alignment.CenterVertically
                 ){
                     Text(
-                        text = "%.1f".format(rateAverage),
+                        text = if (rateAverage == 0.0f) "—" else "%.1f".format(rateAverage),
                         color = UISingleton.textColor4,
                         fontSize = 14.sp.scaleIndependent,
                         fontWeight = FontWeight.ExtraBold,
                         maxLines = 1,
                     )
-                    Icon(
-                        imageVector = Icons.Rounded.Star,
-                        contentDescription = "Rate",
-                        tint = UISingleton.textColor4,
-                        modifier = Modifier.size(14.dp)
-                    )
+                    if (rateAverage > 0.0f) {
+                        Icon(
+                            imageVector = Icons.Rounded.Star,
+                            contentDescription = "Rate",
+                            tint = UISingleton.textColor4,
+                            modifier = Modifier.size(14.dp)
+                        )
+                    }
                 }
             }
         }

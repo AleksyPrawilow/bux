@@ -46,6 +46,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.min
@@ -76,7 +77,11 @@ fun SchedulePageView() {
             schedulePageViewModel.groupLessonsByHour(schedule.lessons[index])
         }
         try {
-            val firstActivityHour: Int = schedulePageViewModel.groupedByHours.keys.sorted()[0]
+            val firstActivityHour: Int = if (schedulePageViewModel.selectedDay == LocalDate.now().dayOfWeek.value - 1 && schedulePageViewModel.selectedWeekOption == 0) {
+                LocalTime.now().hour
+            } else {
+                schedulePageViewModel.groupedByHours.keys.sorted()[0]
+            }
             coroutineScope.launch {
                 val targetPx = with(density) {
                     (minutesDp * 4 * (firstActivityHour - startHour - 1)).toPx().toInt()
@@ -84,7 +89,9 @@ fun SchedulePageView() {
                 val delta = targetPx - listState.firstVisibleItemScrollOffset
                 listState.animateScrollBy(delta.toFloat())
             }
-        } catch (e: Exception) { }
+        } catch (e: Exception) {
+
+        }
     }
 
     val onStart: () -> Unit = {
@@ -189,6 +196,7 @@ fun SchedulePageView() {
                     minutesDp = minutesDp,
                     startHour = startHour,
                     endHour = endHour,
+                    showCurrentTime = schedulePageViewModel.selectedDay == LocalDate.now().dayOfWeek.value - 1 && schedulePageViewModel.selectedWeekOption == 0,
                     schedule = schedule
                 )
             }

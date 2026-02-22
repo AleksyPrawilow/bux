@@ -1,6 +1,7 @@
 package com.cdkentertainment.muniversity.models
 
 import android.content.Context
+import com.cdkentertainment.muniversity.TermId
 import com.cdkentertainment.muniversity.UIHelper
 import com.cdkentertainment.muniversity.UserDataSingleton
 import com.cdkentertainment.muniversity.view_models.LoginPageViewModel
@@ -105,7 +106,7 @@ class OAuthModel {
             if (UIHelper.termIds.isEmpty()) {
                 if (termsResponse.statusCode == 200 && termsResponse.body != null) {
                     val responseString: String = termsResponse.body!!
-                    val parsedResponse: List<SharedDataClasses.IdAndName> = parser.decodeFromString<List<SharedDataClasses.IdAndName>>(responseString)
+                    val parsedResponse: List<TermId> = parser.decodeFromString<List<TermId>>(responseString)
                     UIHelper.termIds = parsedResponse
                 } else {
                     throw Exception("API Error")
