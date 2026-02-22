@@ -84,6 +84,28 @@ fun GradesPageView() {
             }
         }
 
+        if (gradesPageViewModel.trueLatestGrades.isNotEmpty()) {
+            for (course in 0 until gradesPageViewModel.trueLatestGrades.size) {
+                item {
+                    val nameMap: Map<String, CourseUnitData> =
+                        gradesPageViewModel.trueLatestGradesNameMap
+
+                    AnimatedVisibility(
+                        visible = showElements,
+                        enter = enterTransition(3 + course)
+                    ) {
+                        CourseGradesView(
+                            data = gradesPageViewModel.trueLatestGrades[course],
+                            nameMap = nameMap,
+                            modifier = paddingModifier
+                        )
+                    }
+                }
+            }
+
+            item { Spacer(modifier = Modifier.height(24.dp)) }
+        }
+
         for (semester in UIHelper.termIds.reversed()) {
             if (semester.is_in_future) {
                 continue

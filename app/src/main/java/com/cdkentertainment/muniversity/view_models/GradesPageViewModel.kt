@@ -6,6 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cdkentertainment.muniversity.models.Course
+import com.cdkentertainment.muniversity.models.CourseGrades
+import com.cdkentertainment.muniversity.models.CourseUnitData
 import com.cdkentertainment.muniversity.models.GradesDistribution
 import com.cdkentertainment.muniversity.models.GradesPageModel
 import com.cdkentertainment.muniversity.models.Season
@@ -22,7 +25,8 @@ class GradesPageViewModel: ViewModel() {
     var userSubjects: MutableMap<String, Season> = mutableStateMapOf<String, Season>()
     var latestGrades: List<TermGrade>? by mutableStateOf(null)
         private set
-    var trueLatestGrades: List<Map<String, List<Map<String, TermGrade?>>>> by mutableStateOf(emptyList())
+    var trueLatestGrades: List<Course> by mutableStateOf(emptyList())
+    var trueLatestGradesNameMap: Map<String, CourseUnitData> by mutableStateOf(mapOf())
     var loadingLatestGrades: Boolean by mutableStateOf(false)
     var errorLatestGrades: Boolean by mutableStateOf(false)
     var loadingMap: MutableMap<String, Boolean> = mutableStateMapOf<String, Boolean>()
@@ -32,16 +36,16 @@ class GradesPageViewModel: ViewModel() {
     val gradesPageModel: GradesPageModel = GradesPageModel()
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-    fun getLatestGradesFromAll(courses: Season): List<Map<String, List<Map<String, TermGrade?>>>> {
-        val gradesToAdd: MutableList<Map<String, List<Map<String, TermGrade?>>>> = mutableListOf()
+    fun getLatestGradesFromAll(courses: Season): List<Course> {
+        val gradesToAdd: MutableList<Course> = mutableListOf()
         for (course in courses.courseList) {
             for (unitId in course.courseGrades.course_units_grades.keys) {
                 val unit = course.courseGrades.course_units_grades[unitId]
                 val unitGradesToAdd: MutableList<Map<String, TermGrade?>> = mutableListOf()
                 if (unit != null) {
                     for (grades in unit) {
-                        val latestGrade = grades.maxByOrNull { (_, value) ->
-                            LocalDateTime.parse(value?.date_modified, formatter)
+                        val latestGrade = grades.filterValues { it?.date_modified != null }.maxByOrNull { (_, value) ->
+                            LocalDateTime.parse(value!!.date_modified, formatter)
                         }
                         if (latestGrade == null) {
                             continue
@@ -52,10 +56,20 @@ class GradesPageViewModel: ViewModel() {
                         }
                     }
                 }
-                //gradesToAdd.add(unitGradesToAdd)
+                if (unitGradesToAdd.isNotEmpty()) {
+                    val mapToAdd = mapOf(unitId to unitGradesToAdd)
+                    val courseToAdd: Course = Course(
+                        courseId = course.courseId,
+                        courseGrades = CourseGrades(
+                            course_units_grades = mapToAdd,
+                            course_grades = course.courseGrades.course_grades
+                        )
+                    )
+                    gradesToAdd.add(courseToAdd)
+                }
             }
         }
-        return emptyList()
+        return gradesToAdd
     }
 
     suspend fun suspendFetchSemesterGrades(semester: String) {
@@ -66,13 +80,15 @@ class GradesPageViewModel: ViewModel() {
         withContext(Dispatchers.IO) {
             try {
                 val semesterCourses: Season = gradesPageModel.fetchUserGrades(semester)
-                //trueLatestGrades.plus(getLatestGradesFromAll(semesterCourses))
+                trueLatestGradesNameMap = trueLatestGradesNameMap + semesterCourses.courseUnitIds!!
+                trueLatestGrades = trueLatestGrades + getLatestGradesFromAll(semesterCourses)
                 if (gradesPageModel.checkIfSeasonHasGrades(semesterCourses)) {
                     userSubjects[semester] = semesterCourses
                 }
                 errorMap[semester] = false
                 loadedMap[semester] = true
             } catch (e: Exception) {
+                e.printStackTrace()
                 errorMap[semester] = true
                 loadedMap[semester] = false
             }
@@ -108,6 +124,8 @@ class GradesPageViewModel: ViewModel() {
             withContext(Dispatchers.IO) {
                 try {
                     val semesterCourses: Season = gradesPageModel.fetchUserGrades(semester)
+                    trueLatestGradesNameMap = trueLatestGradesNameMap + semesterCourses.courseUnitIds!!
+                    trueLatestGrades = trueLatestGrades + getLatestGradesFromAll(semesterCourses)
                     if (gradesPageModel.checkIfSeasonHasGrades(semesterCourses)) {
                         userSubjects[semester] = semesterCourses
                     }
