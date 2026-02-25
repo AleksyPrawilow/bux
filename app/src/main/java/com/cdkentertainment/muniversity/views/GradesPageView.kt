@@ -49,6 +49,8 @@ fun GradesPageView() {
     )
 
     LaunchedEffect(Unit) {
+        println(gradesPageViewModel.trueLatestGrades)
+        println(gradesPageViewModel.latestGradesLoadingMap)
         gradesPageViewModel.suspendFetchSemesterGrades(UIHelper.termIds.last().id)
         delay(150)
         showElements = true
@@ -74,35 +76,43 @@ fun GradesPageView() {
         item { Spacer(modifier = Modifier.height(8.dp)) }
 
         item {
-            AnimatedVisibility(!showElements, modifier = paddingModifier) {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    CircularProgressIndicator(
-                        color = UISingleton.textColor2,
-                        modifier = Modifier.align(Alignment.Center)
+            AnimatedVisibility(
+                visible = showElements && gradesPageViewModel.latestGradesLoadingMap.values.any { it } && gradesPageViewModel.trueLatestGrades.isNotEmpty(),
+                enter = enterTransition(1)
+            ) {
+                SemesterCardView(
+                    SharedDataClasses.IdAndName(
+                        id = "Latest Grades",
+                        name = SharedDataClasses.LangDict(
+                            pl = "Najnowsze oceny",
+                            en = "Latest grades"
+                        )
+                    ),
+                    modifier = paddingModifier,
+                    icon = ImageVector.vectorResource(R.drawable.rounded_social_leaderboard_24)
+                )
+            }
+        }
+
+        for (course in 0 until gradesPageViewModel.trueLatestGrades.size) {
+            item {
+                val nameMap: Map<String, CourseUnitData> =
+                    gradesPageViewModel.trueLatestGradesNameMap
+
+                AnimatedVisibility(
+                    visible = showElements && gradesPageViewModel.latestGradesLoadingMap.isNotEmpty() && gradesPageViewModel.latestGradesLoadingMap[gradesPageViewModel.trueLatestGrades[course].seasonId] == true,
+                    enter = enterTransition(2 + course)
+                ) {
+                    CourseGradesView(
+                        data = gradesPageViewModel.trueLatestGrades[course].course,
+                        nameMap = nameMap,
+                        modifier = paddingModifier
                     )
                 }
             }
         }
 
-        if (gradesPageViewModel.trueLatestGrades.isNotEmpty()) {
-            for (course in 0 until gradesPageViewModel.trueLatestGrades.size) {
-                item {
-                    val nameMap: Map<String, CourseUnitData> =
-                        gradesPageViewModel.trueLatestGradesNameMap
-
-                    AnimatedVisibility(
-                        visible = showElements,
-                        enter = enterTransition(3 + course)
-                    ) {
-                        CourseGradesView(
-                            data = gradesPageViewModel.trueLatestGrades[course],
-                            nameMap = nameMap,
-                            modifier = paddingModifier
-                        )
-                    }
-                }
-            }
-
+        if (gradesPageViewModel.trueLatestGrades.size > 0) {
             item { Spacer(modifier = Modifier.height(24.dp)) }
         }
 

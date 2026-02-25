@@ -39,6 +39,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cdkentertainment.muniversity.R
+import com.cdkentertainment.muniversity.TermId
 import com.cdkentertainment.muniversity.UIHelper
 import com.cdkentertainment.muniversity.UISingleton
 import com.cdkentertainment.muniversity.UserDataSingleton
@@ -113,8 +114,12 @@ fun HomePageView() {
             loadingError = false
 
             paymentsPageViewModel.fetchPayments()
+            gradesViewModel.initTerms(UIHelper.termIds)
             gradesViewModel.fetchLatestGrades()
-            gradesViewModel.fetchSemesterGrades(UIHelper.termIds.last().id)
+            val lastTerm: TermId? = UIHelper.termIds.lastOrNull { it -> !it.is_in_future }
+            if (lastTerm != null) {
+                gradesViewModel.fetchSemesterGrades(lastTerm.id)
+            }
             loadingError = !viewModel.fetchSchedule()
 
             loading = false
@@ -280,7 +285,7 @@ fun HomePageView() {
                             }
                             val now = LocalDateTime.now()
                             val filteredActivities: List<Lesson> = activities.filter { lesson ->
-                                 LocalDateTime.parse(lesson.end_time).isAfter(now)
+                                 LocalDateTime.parse(lesson.end_time, timeFormatter).isAfter(now)
                             }
 
                             for (activity in filteredActivities) {

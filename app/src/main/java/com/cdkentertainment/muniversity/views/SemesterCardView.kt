@@ -27,24 +27,8 @@ import com.cdkentertainment.muniversity.getLocalized
 import com.cdkentertainment.muniversity.models.SharedDataClasses
 
 @Composable
-fun SemesterCardView(text: SharedDataClasses.IdAndName, modifier: Modifier = Modifier) {
+fun SemesterCardView(text: SharedDataClasses.IdAndName, modifier: Modifier = Modifier, icon: ImageVector = ImageVector.vectorResource(R.drawable.rounded_calendar_month_24)) {
     val context: Context = LocalContext.current
-//    var year: String = ""
-//    var semester: String = ""
-//    when (UserDataSingleton.selectedUniversity) {
-//        1 -> {
-//            val semesterParts: List<String> = text.split("/")
-//            year = semesterParts[0]
-//            semester = if (semesterParts[1][1] == 'L') stringResource(R.string.summer_semester) else stringResource(R.string.winter_semester)
-//        }
-//        2 -> {
-//            year = "${if (text[4] == 'L') text.take(4).toInt() + 1 else text.take(4)}"
-//            semester = if (text[4] == 'L') stringResource(R.string.summer_semester) else stringResource(R.string.winter_semester)
-//        }
-//        else -> {
-//            semester = text
-//        }
-//    }
     Card(
         colors = CardColors(
             contentColor = UISingleton.textColor1,
@@ -62,7 +46,7 @@ fun SemesterCardView(text: SharedDataClasses.IdAndName, modifier: Modifier = Mod
             modifier = Modifier.padding(12.dp)
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.rounded_calendar_month_24),
+                imageVector = icon,
                 contentDescription = null,
                 tint = UISingleton.textColor1,
                 modifier = Modifier.size(32.dp)

@@ -80,6 +80,11 @@ data class Season ( //Final structure for grades per season
     var courseUnitIds: Map<String, CourseUnitData>? = null
 )
 @Serializable
+data class LatestGradeContainer(
+    val course: Course,
+    val seasonId: String
+)
+@Serializable
 data class Course (
     val courseId: String,
     val courseGrades: CourseGrades
