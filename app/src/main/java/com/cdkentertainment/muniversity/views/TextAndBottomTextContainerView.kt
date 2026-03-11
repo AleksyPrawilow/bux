@@ -40,6 +40,7 @@ fun TextAndBottomTextContainerView(
     highlightedText: String,
     bottomFirstText: String,
     bottomSecondText: String,
+    modifier: Modifier = Modifier,
     showHighlightedText: Boolean = true,
     showArrow: Boolean = true,
     backgroundColor: Color = UISingleton.color2,
@@ -58,6 +59,7 @@ fun TextAndBottomTextContainerView(
         elevation = CardDefaults.cardElevation(elevation, disabledElevation = elevation),
         enabled = onClick != null,
         onClick = onClick ?: {},
+        modifier = modifier
     ) {
         Box(
             modifier = Modifier

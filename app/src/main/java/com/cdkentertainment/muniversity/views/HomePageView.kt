@@ -18,6 +18,7 @@ import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.cdkentertainment.muniversity.R
 import com.cdkentertainment.muniversity.TermId
 import com.cdkentertainment.muniversity.UIHelper
@@ -90,9 +92,11 @@ fun HomePageView() {
     val cardLabels: List<Pair<String, ImageVector>> = listOf(
         Pair(stringResource(R.string.latest_grades), ImageVector.vectorResource(R.drawable.rounded_star_24)),
         Pair(stringResource(R.string.tests_page), ImageVector.vectorResource(R.drawable.rounded_assignment_24)),
-        Pair(stringResource(R.string.payments), ImageVector.vectorResource(R.drawable.rounded_payments_24)),
+        Pair(stringResource(R.string.schedule_page), ImageVector.vectorResource(R.drawable.rounded_calendar_month_24)),
         Pair(stringResource(R.string.lecturers), ImageVector.vectorResource(R.drawable.rounded_school_24))
     )
+
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
     val cardLabelStyle: TextStyle = MaterialTheme.typography.titleMedium
     val unpaidSum: Float = paymentsPageViewModel.unpaidSum
@@ -174,9 +178,11 @@ fun HomePageView() {
             }
         }
 
-        item {
-            AnimatedVisibility(showElements && !loadingError, enter = enterTransition(1)) {
-                UserDataView(paddingModifier)
+        if (windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.EXPANDED) {
+            item {
+                AnimatedVisibility(showElements && !loadingError, enter = enterTransition(1)) {
+                    UserDataView(paddingModifier.fillMaxWidth())
+                }
             }
         }
 
@@ -197,10 +203,16 @@ fun HomePageView() {
             FlowRow(
                 verticalArrangement = Arrangement.Center,
                 horizontalArrangement = Arrangement.Center,
+                maxItemsInEachRow = if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) 2 else Int.MAX_VALUE,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 6.dp)
             ) {
+                if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED) {
+                    AnimatedVisibility(showElements && !loadingError, enter = enterTransition(1)) {
+                        UserDataView(paddingModifier.weight(1f))
+                    }
+                }
                 AnimatedVisibility(showElements && !loadingError, enter = scaleEnterTransition(3)) {
                     LatestSomethingView(
                         icon = cardLabels[0].second,
@@ -227,11 +239,8 @@ fun HomePageView() {
                         icon = cardLabels[2].second,
                         title = cardLabels[2].first,
                         maxWidth = maxCardWidth,
-                        badge = unpaidSumFormatted,
-                        loading = paymentsPageViewModel.loading,
-                        loadingError = paymentsPageViewModel.error
                     ) {
-                        screenManagerViewModel.changeScreen(Screens.PAYMENTS)
+                        screenManagerViewModel.changeScreen(Screens.CALENDAR)
                     }
                 }
 
@@ -291,9 +300,10 @@ fun HomePageView() {
                             for (activity in filteredActivities) {
                                 val time: String = "${viewModel.getTimeFromDate(activity.start_time)}-${viewModel.getTimeFromDate(activity.end_time)}"
                                 TextAndBottomTextContainerView(
+                                    modifier = Modifier.weight(1f),
                                     title = activity.course_name.getLocalized(context),
                                     highlightedText = time,
-                                    bottomFirstText = activity.classtype_id,
+                                    bottomFirstText = if (windowSizeClass == WindowWidthSizeClass.COMPACT) activity.classtype_id else UIHelper.classTypeIds[activity.classtype_id]?.name?.getLocalized(context) ?: activity.classtype_id,
                                     bottomSecondText = activity.room_number,
                                     backgroundColor = UISingleton.color1
                                 ) {

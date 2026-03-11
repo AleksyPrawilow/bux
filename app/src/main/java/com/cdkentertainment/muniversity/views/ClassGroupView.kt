@@ -2,6 +2,7 @@ package com.cdkentertainment.muniversity.views
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
@@ -13,6 +14,7 @@ import com.cdkentertainment.muniversity.view_models.LessonGroupPageViewModel
 
 @Composable
 fun ClassGroupView(
+    modifier: Modifier = Modifier,
     data: LessonGroup,
 ) {
     val context: Context = LocalContext.current
@@ -32,6 +34,7 @@ fun ClassGroupView(
         )
     }
     GradeCardView(
+        modifier = modifier,
         courseName = UIHelper.classTypeIds[data.class_type_id]?.name?.getLocalized(context) ?: data.class_type_id,
         grade = data.group_number.toString(),
         showArrow = true,

@@ -6,8 +6,10 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -163,7 +165,7 @@ fun ScheduleDaySelectorView(
                 .padding(12.dp)
         ) {
             SingleChoiceSegmentedButtonRow(
-                modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())
+                modifier = Modifier.horizontalScroll(rememberScrollState())
             ) {
                 for (weekOptionIndex in 0..1) {
                     SegmentedButton(
@@ -201,8 +203,11 @@ fun ScheduleDaySelectorView(
                             inactiveBorderColor = UISingleton.color1
                         ),
                         selected = weekOptionIndex == schedulePageViewModel.selectedWeekOption,
+                        modifier = Modifier.width(IntrinsicSize.Max)
                     ) {
                         Text(
+                            maxLines = 1,
+                            softWrap = false,
                             text = if (weekOptionIndex == 0) stringResource(R.string.this_week) else stringResource(R.string.other_week),
                             style = MaterialTheme.typography.titleMedium,
                             textAlign = TextAlign.Center,

@@ -14,9 +14,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -32,6 +34,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -55,6 +58,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.cdkentertainment.muniversity.Lecturer
 import com.cdkentertainment.muniversity.PeopleSingleton
 import com.cdkentertainment.muniversity.R
@@ -75,7 +79,7 @@ import kotlin.math.max
 fun LecturerRatesPageView() {
     val context: Context = LocalContext.current
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val listState     : LazyListState  = rememberLazyListState()
+    val gridState     : LazyGridState  = rememberLazyGridState()
     val textMeasurer  : TextMeasurer   = rememberTextMeasurer()
     val enterTransition: (Int) -> EnterTransition = UIHelper.slideEnterTransition
     val lecturerRatesPageViewModel: LecturerRatesPageViewModel = viewModel<LecturerRatesPageViewModel>()
@@ -90,6 +94,7 @@ fun LecturerRatesPageView() {
     var selectedPage   : Int       by rememberSaveable { mutableStateOf(0) }
     val pageSize: Int = 20
     val lecturersIndex: Map<String, List<SharedDataClasses.Human>>? = lecturerRatesPageViewModel.lecturersIndex
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
     val paddingModifier: Modifier = Modifier.padding(horizontal = UISingleton.horizontalPadding, vertical = 8.dp)
 
@@ -119,7 +124,7 @@ fun LecturerRatesPageView() {
                 }
             }
             coroutineScope.launch {
-                listState.animateScrollToItem(0)
+                gridState.animateScrollToItem(0)
             }
         }
     }
@@ -148,30 +153,31 @@ fun LecturerRatesPageView() {
         showLecturers = true
     }
 
-    LazyColumn(
-        state = listState,
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED) 2 else 1),
+        state = gridState,
         verticalArrangement = Arrangement.spacedBy(0.dp),
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
     ) {
-        item {
+        item(span = { GridItemSpan(maxLineSpan) }) {
             PageHeaderView(
                 text = stringResource(R.string.lecturers_page),
                 icon = ImageVector.vectorResource(R.drawable.rounded_school_24)
             )
         }
-        item {
+        item(span = { GridItemSpan(maxLineSpan) }) {
             Spacer(modifier = Modifier.height(8.dp))
         }
-        item {
+        item(span = { GridItemSpan(maxLineSpan) }) {
             AnimatedVisibility(lecturerRatesPageViewModel.lecturersIndexLoading["$selectedFaculty/0"] == true, modifier = paddingModifier) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     CircularProgressIndicator(color = UISingleton.textColor2, modifier = Modifier.align(Alignment.Center))
                 }
             }
         }
-        item {
+        item(span = { GridItemSpan(maxLineSpan) }) {
             FlowRow(
                 verticalArrangement = Arrangement.Center,
                 horizontalArrangement = Arrangement.Center,
@@ -243,7 +249,7 @@ fun LecturerRatesPageView() {
                         )
                     }
                 }
-                item {
+                item(span = { GridItemSpan(maxLineSpan) }) {
                     AnimatedVisibility(
                         visible = showElements && lecturerRatesPageViewModel.lecturersIndexLoading["$selectedFaculty/$selectedPage"] == true
                     ) {
@@ -252,7 +258,7 @@ fun LecturerRatesPageView() {
                         }
                     }
                 }
-                item {
+                item(span = { GridItemSpan(maxLineSpan) }) {
                     AnimatedVisibility(
                         visible = lecturerRatesPageViewModel.lecturersIndexError["$selectedFaculty/$selectedPage"] == true && showElements,
                         enter = enterTransition(1)
@@ -302,7 +308,7 @@ fun LecturerRatesPageView() {
                 }
             }
         } else {
-            item {
+            item(span = { GridItemSpan(maxLineSpan) }) {
                 AnimatedVisibility(
                     visible = showSearch && showElements,
                     enter = enterTransition(3)
@@ -375,7 +381,7 @@ fun LecturerRatesPageView() {
                     )
                 }
             }
-            item {
+            item(span = { GridItemSpan(maxLineSpan) }) {
                 AnimatedVisibility(
                     visible = showSearch && showElements && lecturerRatesPageViewModel.lecturersSearchLoading
                 ) {
@@ -384,7 +390,7 @@ fun LecturerRatesPageView() {
                     }
                 }
             }
-            item {
+            item(span = { GridItemSpan(maxLineSpan) }) {
                 AnimatedVisibility(
                     visible = showSearch && showElements && lecturerRatesPageViewModel.lecturersSearchError
                 ) {
@@ -397,7 +403,7 @@ fun LecturerRatesPageView() {
                     }
                 }
             }
-            item {
+            item(span = { GridItemSpan(maxLineSpan) }) {
                 AnimatedVisibility(
                     visible = showElements && showSearch && !lecturerRatesPageViewModel.lecturersSearchError && !lecturerRatesPageViewModel.lecturersSearchLoading && lecturerRatesPageViewModel.lastQuery.isNotEmpty()
                 ) {
@@ -426,7 +432,7 @@ fun LecturerRatesPageView() {
                         }
                     }
                 }
-                item {
+                item(span = { GridItemSpan(maxLineSpan) }) {
                     AnimatedVisibility(
                         visible = showElements && showSearch && lecturerRatesPageViewModel.lastQueryResults.isNullOrEmpty(),
                     ) {
@@ -439,10 +445,10 @@ fun LecturerRatesPageView() {
                 }
             }
         }
-        item {
+        item(span = { GridItemSpan(maxLineSpan) }) {
             Spacer(modifier = Modifier.height(24.dp))
         }
-        item {
+        item(span = { GridItemSpan(maxLineSpan) }) {
             Spacer(modifier = Modifier.height(64.dp))
         }
     }

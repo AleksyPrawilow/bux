@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -44,6 +45,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.cdkentertainment.muniversity.UIHelper
 import com.cdkentertainment.muniversity.UISingleton
 import com.cdkentertainment.muniversity.getLocalized
@@ -74,6 +76,7 @@ fun TimetableActivityView(
         if (show) 1f else 0f,
         tween(300, 150 * index, EaseOutBack)
     )
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
     LaunchedEffect(Unit) {
         delay(20)
@@ -171,7 +174,7 @@ fun TimetableActivityView(
                         .background(UISingleton.color3)
                 ) {
                     Text(
-                        text = data.classtype_id,
+                        text = if (windowSizeClass == WindowWidthSizeClass.COMPACT) data.classtype_id else UIHelper.classTypeIds[data.classtype_id]?.name?.getLocalized(context) ?: data.classtype_id,
                         style = MaterialTheme.typography.titleSmall,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,

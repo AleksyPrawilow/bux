@@ -20,6 +20,11 @@ fun CourseContainerView(
         title = courseUnits.first().course_name.getLocalized(context),
         modifier = modifier
     ) {
-        courseUnits.forEach { renderCourseUnit(it) }
+        courseUnits.forEach { unit ->
+            ClassGroupView(
+                data = unit,
+                modifier = Modifier.weight(1f)
+            )
+        }
     }
 }

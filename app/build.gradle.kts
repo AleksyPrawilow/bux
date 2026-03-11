@@ -18,7 +18,7 @@ android {
         applicationId = "com.cdkentertainment.muniversity"
         minSdk = 28
         targetSdk = 36
-        versionCode = 3
+        versionCode = 4
         versionName = "0.0.4"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -46,6 +46,7 @@ android {
 
 dependencies {
     implementation("io.ktor:ktor-client-android:3.3.0")
+    implementation("androidx.compose.material3.adaptive:adaptive")
     implementation(libs.vico.compose)
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("androidx.datastore:datastore-preferences:1.1.7")

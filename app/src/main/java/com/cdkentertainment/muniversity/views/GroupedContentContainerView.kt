@@ -2,7 +2,8 @@ package com.cdkentertainment.muniversity.views
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.FlowRowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,12 +12,14 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.cdkentertainment.muniversity.UISingleton
 
 @Composable
@@ -25,8 +28,10 @@ fun GroupedContentContainerView(
     modifier: Modifier = Modifier,
     backgroundColor: Color = UISingleton.color2,
     onClick: (() -> Unit)? = null,
-    content: @Composable (ColumnScope.() -> Unit)
+    content: @Composable (FlowRowScope.() -> Unit)
 ) {
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+
     Card(
         colors = CardColors(
             contentColor = UISingleton.textColor1,
@@ -59,7 +64,15 @@ fun GroupedContentContainerView(
                     fontWeight = FontWeight.Bold
                 )
             }
-            content()
+            FlowRow(
+                maxItemsInEachRow = if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED) 2 else 1,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                content()
+            }
         }
     }
 }

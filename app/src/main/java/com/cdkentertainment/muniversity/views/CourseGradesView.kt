@@ -47,6 +47,7 @@ fun CourseGradesView(
             val unitClassType: String = nameMap[courseUnit]?.classtype_id ?: "N/A"
             val condition: Boolean = data.courseGrades.course_units_grades[courseUnit] != null && data.courseGrades.course_units_grades[courseUnit]?.first()["1"] != null
             GradeCardView(
+                modifier = Modifier.weight(1f),
                 courseName = UIHelper.classTypeIds[unitClassType]?.name?.getLocalized(context) ?: "N/A",
                 grade = if (condition) data.courseGrades.course_units_grades[courseUnit]?.first()["1"]?.value_symbol ?: "—" else "—",
                 showArrow = condition,

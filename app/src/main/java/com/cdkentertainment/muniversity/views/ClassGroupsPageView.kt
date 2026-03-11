@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -47,6 +48,7 @@ fun ClassGroupsPageView() {
     val enterTransition: (Int) -> EnterTransition = UIHelper.slideEnterTransition
     var showElements: Boolean by rememberSaveable { mutableStateOf(false) }
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
     val paddingModifier: Modifier = Modifier.padding(
         horizontal = UISingleton.horizontalPadding,
@@ -144,7 +146,10 @@ fun ClassGroupsPageView() {
                                 courseUnits,
                                 modifier = paddingModifier
                             ) { unit ->
-                                ClassGroupView(unit)
+                                ClassGroupView(
+                                    data = unit,
+                                    modifier = Modifier
+                                )
                             }
                         }
                     }
