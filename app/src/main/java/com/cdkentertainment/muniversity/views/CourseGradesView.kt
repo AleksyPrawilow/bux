@@ -45,8 +45,8 @@ fun CourseGradesView(
     ) {
         for (courseUnit in data.courseGrades.course_units_grades.keys) {
             val unitClassType: String = nameMap[courseUnit]?.classtype_id ?: "N/A"
-            val condition: Boolean = data.courseGrades.course_units_grades[courseUnit] != null && data.courseGrades.course_units_grades[courseUnit]?.first()["1"] != null
-            val grade: TermGrade? = data.courseGrades.course_units_grades[courseUnit]?.reversed()?.first()?.firstNotNullOf { it.value }
+            val condition: Boolean = data.courseGrades.course_units_grades[courseUnit]?.first()?.toList()?.asReversed()?.toMap()?.firstNotNullOfOrNull { it.value } != null
+            val grade: TermGrade? = data.courseGrades.course_units_grades[courseUnit]?.first()?.toList()?.asReversed()?.toMap()?.firstNotNullOfOrNull { it.value }
             GradeCardView(
                 modifier = Modifier.weight(1f),
                 courseName = UIHelper.classTypeIds[unitClassType]?.name?.getLocalized(context) ?: "N/A",
