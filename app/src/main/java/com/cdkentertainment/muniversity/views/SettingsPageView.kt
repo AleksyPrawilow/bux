@@ -74,8 +74,8 @@ fun SettingsPageView() {
                 coroutineScope.launch {
                     try {
                         coroutineScope.launch {
-                            UserDataSingleton.deleteUserCredentials(context)
                             BackendDataSender.get("Auth/Logout")
+                            UserDataSingleton.deleteUserCredentials(context)
                             UIHelper.termIds = listOf()
                             val activity = context as Activity
                             val intent = Intent(context, MainActivity::class.java)
