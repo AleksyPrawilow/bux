@@ -40,6 +40,7 @@ import com.cdkentertainment.muniversity.R
 import com.cdkentertainment.muniversity.UIHelper
 import com.cdkentertainment.muniversity.UISingleton
 import com.cdkentertainment.muniversity.UserDataSingleton
+import com.cdkentertainment.muniversity.models.BackendDataSender
 import com.cdkentertainment.muniversity.view_models.SettingsPageViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -72,13 +73,16 @@ fun SettingsPageView() {
             onConfirm = {
                 coroutineScope.launch {
                     try {
-                        UserDataSingleton.deleteUserCredentials(context)
-                        UIHelper.termIds = listOf()
-                        val activity = context as Activity
-                        val intent = Intent(context, MainActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        context.startActivity(intent)
-                        activity.finish()
+                        coroutineScope.launch {
+                            UserDataSingleton.deleteUserCredentials(context)
+                            BackendDataSender.get("Auth/Logout")
+                            UIHelper.termIds = listOf()
+                            val activity = context as Activity
+                            val intent = Intent(context, MainActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            context.startActivity(intent)
+                            activity.finish()
+                        }
                     } catch (e: Exception) {
                         val toast: Toast = Toast.makeText(context, somethingWentWrongText, Toast.LENGTH_SHORT)
                         toast.show()
