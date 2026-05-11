@@ -7,7 +7,7 @@ plugins {
 
 android {
     android.buildFeatures.buildConfig = true
-    namespace = "com.cdkentertainment.bux"
+    namespace = "com.cdkentertainment.muniversity"
     compileSdk = 36
 
     androidResources{
@@ -15,11 +15,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.cdkentertainment.bux"
-        minSdk = 30
+        applicationId = "com.cdkentertainment.muniversity"
+        minSdk = 28
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 5
+        versionName = "0.0.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -46,6 +46,7 @@ android {
 
 dependencies {
     implementation("io.ktor:ktor-client-android:3.3.0")
+    implementation("androidx.compose.material3.adaptive:adaptive")
     implementation(libs.vico.compose)
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("androidx.datastore:datastore-preferences:1.1.7")
